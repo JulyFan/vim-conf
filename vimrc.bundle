@@ -14,7 +14,7 @@ Plugin 'VundleVim/Vundle.vim'
 "" 2. code folding
 Plugin 'tmhedberg/SimpylFold'
 
-"" 3. code folding
+"" 3. nerdtree
 Plugin 'scrooloose/nerdtree'
 
 "" 4. python-mode 
@@ -23,13 +23,33 @@ Plugin 'klen/python-mode'
 "" 5. targbar
 Plugin 'majutsushi/tagbar'
 
-"" 
+"" 6. airline
+Plugin 'bling/vim-airline'
 
-"" 
+"" 7. 
+Plugin 'chxuan/change-colorscheme'
 
-"" 
+"" 8. ctrl-p模糊搜索插件
+Plugin 'kien/ctrlp.vim'
 
-"" 
+"" 9. git插件
+Plugin 'tpope/vim-fugitive'
+
+"" 10. python补全
+Plugin 'davidhalter/jedi-vim'
+
+"" 11. 快速注释代码
+Plugin 'scrooloose/nerdcommenter'
+
+"" 12. auto-pairs
+Plugin 'jiangmiao/auto-pairs'
+
+"" 13. 光标快速移动
+Plugin 'easymotion/vim-easymotion'
+
+""14. markdown编辑与预览
+Plugin 'iamcco/markdown-preview.vim'
+
 
 call vundle#end()
 filetype plugin indent on
@@ -98,16 +118,23 @@ let NERDTreeIgnore=['\.pyc$', '\~$']
 "" ?       切换是否显示 Quick Help
 
 "" 3. Python-mode
-let g:pymode_virtualenv=1
+"let g:pymode_rope = 1
+let g:pymode_python = 'python3'
 let g:pymode_doc=0
+let g:pymode_rope = 0
 "" remove preview of code complete
 set completeopt-=preview
 "" prevent rope searching in parent dirs
-let g:pymode_rope_lookup_project=0
+"let g:pymode_rope_lookup_project=0
 ""
 ""let g:pymode_rope_lookup_project=0
+map <leader>pf :PymodeLintAuto<CR>
 
 "" 4. targbar
 map <leader>tb :TagbarToggle<CR>
 " autofocus on tagbar open
 let g:tagbar_autofocus=1
+
+
+" 5. jedi-vim
+let g:jedi#rename_command = '<leader>re'

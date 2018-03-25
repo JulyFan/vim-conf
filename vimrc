@@ -32,6 +32,7 @@ set autoindent
 set textwidth=79
 
 "" 6. file encoding"" 
+set termencoding=utf-8
 set encoding=utf-8
 
 "" 7. hilight search word""
@@ -50,7 +51,6 @@ set mouse=a
 
 "" 11. With a map leader it's possible to do extra key combinations
 "" like <leader>w saves the current file
-let mapleader = ","
 let g:mapleader = "," 
 
 "" 12. Sets how many lines of history VIM has to remember
@@ -61,6 +61,7 @@ set history=700
 
 "" 14. Always show current position
 set ruler
+set cursorline
 
 "" 15. Height of the command bar
 set cmdheight=2
@@ -83,14 +84,14 @@ set smartcase
 set noswapfile
 
 "" 20. Treat long lines as break lines (useful when moving around in them)
-map j gj
-map k gk
+noremap j gj
+noremap k gk
 
 "" 21. Smart way to move between windows
-map <C-j> <C-W>j
-map <C-k> <C-W>k
-map <C-h> <C-W>h
-map <C-l> <C-W>l
+noremap <C-j> <C-W>j
+noremap <C-k> <C-W>k
+noremap <C-h> <C-W>h
+noremap <C-l> <C-W>l
 
 "" 22. Close the current buffer
 map <leader>bd :Bclose<cr>
@@ -113,22 +114,36 @@ map <leader>cd :cd %:p:h<cr>:pwd<cr>
 "" 26. Always show the status line
 set laststatus=2
 
-"" 27. Format the status line
-set statusline+=%8*%{HasPaste()}\ %*
-set statusline+=%1*\ %F\ %*
-set statusline+=%2*\ %m%r%h\ %*
-set statusline+=%3*\ %w\ %*
-set statusline+=%4*\ %r%{getcwd()}%h\ %*
-set statusline+=%=%7*\ %{&ff}\ \|\ %y\ \|\ %{''.(&fenc!=''?&fenc:&enc).''}\ \|\ %*
-set statusline+=%5*\ L:%l/%L\ R:%v\ %*
-hi User1 cterm=bold ctermfg=232 ctermbg=179
-hi User2 cterm=None ctermfg=214 ctermbg=242
-hi User3 cterm=None ctermfg=251 ctermbg=240
-hi User4 cterm=bold ctermfg=Cyan ctermbg=239
-hi User5 cterm=None ctermfg=208 ctermbg=238
-hi User6 cterm=None ctermfg=216 ctermbg=237
-hi User7 cterm=None ctermfg=250 ctermbg=239
-hi User8 cterm=None ctermfg=DarkGreen ctermbg=240
+" 高亮匹配括号
+set showmatch
+" 1/10s
+set matchtime=1
+
+set magic
+
+" 禁止生成临时文件
+set nobackup
+set noswapfile
+
+" 在vim外修改过，自动读入
+set autoread
+
+"" 27. Format the status line ---using airline instead
+"set statusline+=%8*%{HasPaste()}\ %*
+"set statusline+=%1*\ %F\ %*
+"set statusline+=%2*\ %m%r%h\ %*
+"set statusline+=%3*\ %w\ %*
+"set statusline+=%4*\ %r%{getcwd()}%h\ %*
+"set statusline+=%=%7*\ %{&ff}\ \|\ %y\ \|\ %{''.(&fenc!=''?&fenc:&enc).''}\ \|\ %*
+"set statusline+=%5*\ L:%l/%L\ R:%v\ %*
+"hi User1 cterm=bold ctermfg=232 ctermbg=179
+"hi User2 cterm=None ctermfg=214 ctermbg=242
+"hi User3 cterm=None ctermfg=251 ctermbg=240
+"hi User4 cterm=bold ctermfg=Cyan ctermbg=239
+"hi User5 cterm=None ctermfg=208 ctermbg=238
+"hi User6 cterm=None ctermfg=216 ctermbg=237
+"hi User7 cterm=None ctermfg=250 ctermbg=239
+"hi User8 cterm=None ctermfg=DarkGreen ctermbg=240
 
 "" 28. Move a line of text using ALT+[jk] or Comamnd+[jk] on mac
 "nmap <M-j> mz:m+<cr>
@@ -194,8 +209,15 @@ set foldlevel=99
 "" Enable folding with the spacebar
 nnoremap <space> za
 
-"" 37. 
-"" 38. 
+"" 37. Smart way to move between windows
+imap <C-j> <Down>
+imap <C-k> <Up>
+imap <C-h> <Left>
+imap <C-l> <Right>
+
+"" 38. add header to python files when created
+autocmd bufnewfile *.py call PythonHeader()
+
 "" 39. 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -266,4 +288,14 @@ function! <SID>BufcloseCloseIt()
    if buflisted(l:currentBufNum)
      execute("bdelete! ".l:currentBufNum)
    endif
+endfunction
+
+"" 5.
+function PythonHeader()
+    call setline(1, "#!/usr/bin/env python")
+    call append(1, "# -*- coding: utf-8 -*-")
+    call append(2, "# July @ " . strftime('%Y-%m-%d %T', localtime()))
+    normal G
+    normal o
+    normal o
 endfunction
